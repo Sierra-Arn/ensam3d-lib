@@ -1,0 +1,19 @@
+# VS Code
+.vscode/
+
+# Environments
+.pixi/*
+!.pixi/config.toml
+
+# Python-generated files
+__pycache__/
+*.egg-info/
+
+# ML-specifc files
+*.pt
+sam-3d-body-vith/
+
+# Test artifacts
+*.png
+*.mp4
+*.json
