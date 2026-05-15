@@ -53,8 +53,8 @@ To reproduce the benchmark on your hardware, see [ensam3d_inference.examples.ben
 
 ## III. **Runtime Optimizations**
 
-1. **Mixed-Precision Compute (`bfloat16`)**  
-   Forward-pass activations in the ViT backbone and transformer decoder are executed under `torch.autocast(device_type="cuda", dtype=torch.bfloat16)`. This routes matrix multiplications, convolutions, and self-attention through NVIDIA Tensor Cores, reducing arithmetic.
+1. **Hardware-Aware Mixed-Precision Compute**  
+   The compute dtype for forward-pass activations in the ViT backbone and transformer decoder is dynamically resolved at runtime based on GPU capabilities via `PipelineConfig.core_compute_dtype`. Ampere and newer architectures (compute capability >= 8.0) use `bfloat16` to leverage Tensor Cores while preserving the `float32` dynamic range. Pre-Ampere CUDA devices (CC 6-7) fall back to `float16` with a numerical stability warning. CPU targets or unsupported hardware default to `float32` for guaranteed compatibility. Applied exclusively to backbone and decoder activations; sensitive geometric heads and the MHR TorchScript solver remain in `float32` via explicit dtype boundaries.
 
 2. **Static Weight Precision Conversion**  
    All floating-point parameters and buffers are permanently cast to `bfloat16` at model initialization (excluding explicitly protected modules). This halves the VRAM footprint for stored weights and eliminates implicit on-the-fly dtype casting overhead during inference.
