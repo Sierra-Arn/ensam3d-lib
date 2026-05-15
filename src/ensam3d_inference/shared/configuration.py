@@ -1,6 +1,7 @@
 # src/ensam3d_inference/shared/configuration.py
 from dataclasses import dataclass
 from functools import cached_property
+import warnings
 import numpy as np
 import torch
 
@@ -77,15 +78,48 @@ class PipelineConfig:
     float32 inputs.
     """
 
-    core_compute_dtype: torch.dtype = torch.bfloat16
-    """
-    Precision used for forward-pass computations inside torch.autocast.
-    Set to bfloat16 to accelerate Linear, Conv, and Attention layers via
-    tensor cores on Ampere+/Hopper GPUs while preserving the dynamic
-    range of float32. Applied exclusively to backbone and decoder
-    activations; sensitive geometric heads and the MHR TorchScript solver
-    remain in float32 via explicit dtype boundaries.
-    """
+    @cached_property
+    def core_compute_dtype(self) -> torch.dtype:
+        """
+        Precision used for forward-pass computations inside torch.autocast.
+        Dynamically resolved at runtime based on GPU compute capabilities.
+        Ampere and newer architectures use bfloat16 to leverage tensor cores
+        while preserving the float32 dynamic range. Pre-Ampere CUDA devices
+        fall back to float16 with a numerical stability warning. CPU targets
+        or unsupported hardware default to float32 for guaranteed compatibility.
+        Applied exclusively to backbone and decoder activations; sensitive
+        geometric heads and the MHR TorchScript solver remain in float32 via
+        explicit dtype boundaries.
+
+        Returns
+        -------
+        torch.dtype
+            Selected compute dtype for the current execution environment.
+        """
+        
+        if torch.cuda.is_available():
+            try:
+                cc_major = torch.cuda.get_device_properties(0).major
+                if cc_major >= 8:
+                    return torch.bfloat16
+                elif cc_major >= 6:
+                    warnings.warn(
+                        "GPU compute capability < 8.0: falling back to float16.",
+                        UserWarning,
+                        stacklevel=2,
+                    )
+                    return torch.float16
+            except Exception:
+                pass
+
+        warnings.warn(
+            "No compatible GPU or unsupported architecture detected: using float32. "
+            "Mixed-precision acceleration is disabled; expect higher VRAM consumption "
+            "and reduced throughput compared to CUDA-optimized runtimes.",
+            UserWarning,
+            stacklevel=2,
+        )
+        return torch.float32
 
     # ========== MODEL ASSETS & LOADING ==========
 
