@@ -38,9 +38,9 @@ Each directory includes its own `README.md` with detailed information about its 
 | [OpenCV](https://github.com/opencv/opencv) | Open Source Computer Vision Library  | Geometric preprocessing stage in the inference pipeline |
 | [RoMa](https://github.com/naver/roma) | Lightweight library to deal with 3D rotations in PyTorch | Rotation representation conversion in 3D pose estimation |
 
-[^1]: While PyTorch supports CPU execution, the models used in this project are so computationally intensive that CUDA is required for practical use.
+[^1]: While PyTorch supports CPU execution, the models used in this project are so computationally intensive that CUDA is required for practical use. If you still intend to run inference on a CPU, this capability is fully supported and the pipeline will execute without modification. In that case, the NVIDIA CUDA Toolkit is never invoked and can be safely omitted from the environment without affecting inference.
 
-[^2]: This dependency is only required if model weights are fetched remotely from the HuggingFace Hub. If all checkpoints are available locally, `huggingface_hub` is never invoked at runtime and can be omitted from the environment without affecting inference.
+[^2]: This dependency is only required if model weights are fetched remotely from the HuggingFace Hub. If all checkpoints are available locally, `huggingface_hub` is never invoked and can be safely omitted from the environment without affecting inference.
 
 ## **Model Weights**
 
