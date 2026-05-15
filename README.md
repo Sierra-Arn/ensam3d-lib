@@ -17,6 +17,12 @@ ensam3d-lib/
 
 Each directory includes its own `README.md` with detailed information about its contents.
 
+> **Documentation Routing Guide:**  
+> - For **technical reference** — including benchmarks, package structure, and execution examples — refer to `src/<package_name>/README.md`.  
+> - For **logical and conceptual documentation** — covering dataflow, pipeline execution logic, and architectural rationale — refer to `docs/<package_name>/README.md`.  
+> 
+> These documents either provide direct explanations or link to deeper technical references.
+
 ## **Dependencies Overview**
 
 | Dependency | Description | Usage in This Project |
