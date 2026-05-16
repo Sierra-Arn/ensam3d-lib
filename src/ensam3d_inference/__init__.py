@@ -1,38 +1,51 @@
 # src/ensam3d_inference/__init__.py
-from .pipeline import Pipeline, PreprocessorInput, PipelineOutput
-from .shared import DeviceType
 """
 Enhanced SAM 3D Body Inference.
 
 High-performance, production-ready package for 3D human pose and mesh
-estimation from RGB images. Combines YOLO-based person detection, cropping, 
-and a ViT-HMR transformer backbone with iterative pose refinement 
-and MHR mesh reconstruction.
+estimation from RGB images. Combines YOLO-based person detection,
+canonical cropping, and a ViT-HMR transformer backbone with iterative
+pose refinement and MHR mesh reconstruction.
 
 Quick Start
 -----------
 >>> from ensam3d_inference import Pipeline, PreprocessorInput, DeviceType
->>> import cv2
+>>> import numpy as np
 
+>>> # Initialize pipeline (weights auto-download if path is a HF repo ID)
 >>> pipeline = Pipeline(
 ...     model_path="sam-3d-body-vith",
-...     detector_device=DeviceType.CUDA,
 ...     model_device=DeviceType.CUDA,
+...     detector_device=DeviceType.CUDA,
 ... )
 
->>> img_bgr = cv2.imread("example.png")
->>> img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
->>> results = pipeline(PreprocessorInput(imgs=[img_rgb]))
+>>> # A blank image contains no persons, so detection returns None
+>>> dummy_frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+>>> results = pipeline(PreprocessorInput(imgs=[dummy_frame]))
+>>> print(results[0] is None)
+True
 
->>> if results[0] is not None:
-...     print("Detected keypoints shape:", results[0].pose.pred_keypoints_2d.shape)
+>>> # For real images with detected persons, access pose data like this:
+>>> # if results[0] is not None:
+... #     print(results[0].pose.pred_keypoints_2d.shape)
+... #     # Expected output: (1, 70, 2)
 
-Main Exports
-------------
-Pipeline : callable
-    End-to-end inference orchestrator. Handles detection, cropping,
-    model forward pass, and temporal alignment.
-PreprocessorInput : NamedTuple
-    Standard input container. Accepts a list of RGB frames (NumPy uint8
-    HWC arrays) and optional shared camera intrinsics.
+For complete usage examples, including visualization, benchmarking, and profiling,
+see the ensam3d_inference.examples subpackage:
+- python -m ensam3d_inference.examples.visualization
+- python -m ensam3d_inference.examples.benchmarking
+- python -m ensam3d_inference.examples.profiling
 """
+
+from .pipeline import Pipeline
+from .preprocessor.types import PreprocessorInput
+from .pipeline.types import FramePoseResult, PipelineOutput
+from .shared.types import DeviceType
+
+__all__ = [
+    "Pipeline",
+    "PreprocessorInput", 
+    "FramePoseResult", 
+    "PipelineOutput",
+    "DeviceType",
+]
