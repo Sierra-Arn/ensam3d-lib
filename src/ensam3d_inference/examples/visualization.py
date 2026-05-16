@@ -31,7 +31,7 @@ import numpy as np
 from ensam3d_inference import (
     Pipeline, 
     PreprocessorInput, 
-    PipelineOutput,
+    FramePoseResult,
     DeviceType
 )
 from ensam3d_inference.examples.keypoints import KEYPOINTS, SKELETON
@@ -63,7 +63,7 @@ def _read_image(image_path: str) -> np.ndarray:
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 
-def _draw_bbox(ax: plt.Axes, output: PipelineOutput) -> None:
+def _draw_bbox(ax: plt.Axes, output: FramePoseResult) -> None:
     x1, y1, x2, y2 = output.detection.coords.cpu().numpy()
     w = x2 - x1
     h = y2 - y1
@@ -76,14 +76,14 @@ def _draw_bbox(ax: plt.Axes, output: PipelineOutput) -> None:
     ax.add_patch(rect)
 
 
-def _draw_keypoints(ax: plt.Axes, output: PipelineOutput) -> None:
+def _draw_keypoints(ax: plt.Axes, output: FramePoseResult) -> None:
     kps = output.pose.pred_keypoints_2d[0].cpu().numpy()
     for idx, (x, y) in enumerate(kps):
         color = tuple(c / 255.0 for c in KEYPOINTS[idx].color)
         ax.scatter(x, y, c=[color], s=20, zorder=3)
 
 
-def _draw_skeleton(ax: plt.Axes, output: PipelineOutput) -> None:
+def _draw_skeleton(ax: plt.Axes, output: FramePoseResult) -> None:
     kps = output.pose.pred_keypoints_2d[0].cpu().numpy()
     for link in SKELETON:
         x_start, y_start = kps[link.start]
@@ -100,7 +100,7 @@ def _draw_skeleton(ax: plt.Axes, output: PipelineOutput) -> None:
 
 def _visualize(
     image: np.ndarray,
-    output: PipelineOutput,
+    output: FramePoseResult,
     show_bbox: bool,
     show_keypoints: bool,
     show_skeleton: bool,

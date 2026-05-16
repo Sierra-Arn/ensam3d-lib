@@ -1,5 +1,5 @@
 # src/ensam3d_inference/pipeline/__init__.py
-from .types import PipelineOutput
+from .types import FramePoseResult, PipelineOutput
 from ..preprocessor import Preprocessor
 from ..preprocessor.types import PreprocessorInput
 from ..core import Engine
@@ -64,7 +64,7 @@ class Pipeline:
             device=model_device,
         )
 
-    def __call__(self, request: PreprocessorInput) -> list[PipelineOutput | None]:
+    def __call__(self, request: PreprocessorInput) -> PipelineOutput:
         """
         Run end-to-end human pose estimation on a batch of RGB frames.
 
@@ -81,16 +81,15 @@ class Pipeline:
 
         Returns
         -------
-        list of PipelineOutput or None
-            One entry per input frame aligned with request.imgs, where each
-            entry is either a PipelineOutput containing the detector output
-            and corresponding pose estimation result, or None if no person
-            was detected in the corresponding frame.
+        PipelineOutput
+            Container with one entry per input frame aligned with request.imgs.
+            Each entry is either a FramePoseResult (detection + pose) or None
+            if no person was detected in the corresponding frame.
         """
         preprocessed = self.preprocessor(request)
 
         if preprocessed is None:
-            return [None] * len(request.imgs)
+            return PipelineOutput([None] * len(request.imgs))
 
         pose_output = self.model(
             ModelInput(
@@ -104,11 +103,11 @@ class Pipeline:
             )
         )
 
-        results: list[PipelineOutput | None] = [None] * len(request.imgs)
+        results: PipelineOutput = [None] * len(request.imgs)
         for batch_idx, frame_idx in enumerate(preprocessed.valid_indices):
             detection = preprocessed.detections[frame_idx]
-            results[frame_idx] = PipelineOutput(
-                detection = detection,
+            results[frame_idx] = FramePoseResult(
+                detection=detection,
                 pose=PoseEstimatorOutput(
                     pred_keypoints_3d=pose_output.pred_keypoints_3d[[batch_idx]],
                     pred_keypoints_2d=pose_output.pred_keypoints_2d[[batch_idx]],

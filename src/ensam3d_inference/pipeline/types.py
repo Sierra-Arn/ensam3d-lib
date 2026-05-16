@@ -4,12 +4,10 @@ from ..preprocessor.detector.types import Detection
 from ..core.pose_estimation.types import PoseEstimatorOutput
 
 
-class PipelineOutput(NamedTuple):
+class FramePoseResult(NamedTuple):
     """
-    Container for the output of the end-to-end human pose pipeline.
-
-    Combines the detector output with the corresponding pose estimation
-    result for a single successfully processed frame.
+    Container for the detector output with the corresponding pose 
+    estimation result for a single successfully processed frame.
 
     Attributes
     ----------
@@ -24,3 +22,12 @@ class PipelineOutput(NamedTuple):
 
     detection: Detection
     pose: PoseEstimatorOutput
+
+
+PipelineOutput = list[FramePoseResult | None]
+"""
+Inference results for a batch of input frames represented as a list with one entry per input
+frame aligned with the corresponding PreprocessorInput, where each entry is either a
+FramePoseResult containing the detector output and corresponding pose estimation result,
+or None if no person was detected in the corresponding frame.
+"""
