@@ -1,100 +1,89 @@
 # **Enhanced SAM 3D Body Library**
 
-*Collection of production-oriented inference pipelines based on [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body) for 3D human body pose and shape estimation.*
+> *Collection of production-oriented inference pipelines based on [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body) for 3D human body pose and shape estimation.*
 
 ## **Project Structure**
 
 ```bash
 ensam3d-lib/
-├── src/                        # Standard src-layout for isolated package development
-│   └── ensam3d_inference/      # Production inference pipeline for 3D human pose estimation
-├── docs/                       # Conceptual documentation — mirrors src/ structure for traceability
-│   └── ensam3d_inference/      # Package-specific docs for ensam3d_inference
-├── pyproject.toml              # Unified project configuration: metadata, dependencies, and build backend
-├── pixi.toml                   # Pixi project configuration: environments, dependencies, and platforms
-└── pixi.lock                   # Locked dependency versions for reproducible environments
+├── src/                        # Standard src-layout; each subpackage is a self-contained, 
+│                               # production-ready reimplementation of SAM 3D Body
+│
+├── docs/                       # Conceptual & architectural documentation — each subdirectory 
+│                               # mirrors its src/ counterpart with subpackage overview, 
+│                               # design rationale, pipeline diagrams, 
+│                               # data contracts, installation guide, etc.
+│
+├── pyproject.toml              # Standard Python project manifest defining 
+│                               # build system and package metadata
+│
+├── pixi.toml                   # Pixi environment configuration for working with the repository
+│                               # as a local development project rather than a consumed dependency
+│
+└── pixi.lock                   # Fully resolved and reproducible dependency lockfile
+                                # for the local Pixi development environment
 ```
 
-Each directory includes its own `README.md` with detailed information about its contents.
+## **Available Subpackages**
 
-> **Documentation Routing Guide:**  
-> - For **technical reference** — including benchmarks, package structure, and execution examples — refer to `src/<package_name>/README.md`.  
-> - For **logical and conceptual documentation** — covering dataflow, pipeline execution logic, and architectural rationale — refer to `docs/<package_name>/README.md`.  
-> 
-> These documents either provide direct explanations or link to deeper technical references.
+### I. `ensam3d_inference`
 
-## **Dependencies Overview**
+Production-oriented, inference-only reimplementation of the original research-oriented SAM 3D Body architecture. Designed for high-throughput 3D human pose estimation in video streams, where each frame is assumed to contain at most one primary person.
 
-| Dependency | Description | Usage in This Project |
-|------------|------------|------------------------|
-| [PyTorch](https://github.com/pytorch/pytorch) | Deep learning framework for tensor computation and automatic differentiation with GPU acceleration | Core inference runtime for executing neural network models |
-| [NumPy](https://github.com/numpy/numpy) | The fundamental package for scientific computing with Python | General-purpose array operations for CPU-side numerical processing and data handling |
-| [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda/toolkit) | GPU computing platform for hardware-accelerated computation | Provides GPU acceleration for PyTorch inference computations [^1] |
-| [jaxtyping](https://github.com/patrick-kidger/jaxtyping) | Type annotations and runtime checking for shape and dtype of NumPy/PyTorch arrays | Static shape and dtype annotations for tensors, used to improve code readability and traceability across the inference pipeline |
-| [torchvision](https://github.com/pytorch/vision) | Popular datasets, model architectures, and common image transformations for computer vision | Image preprocessing stage before input to the neural network |
-| [timm](https://github.com/huggingface/pytorch-image-models) | Сollection of PyTorch image encoders / backbones | Feature extraction in the model architecture |
-| [Ultralytics](https://github.com/ultralytics/ultralytics) | Framework for YOLO-based object detection models | First stage in the inference pipeline for human detection |
-| [huggingface_hub](https://github.com/huggingface/huggingface_hub) | Official Python client for the Hugging Face Hub | Model weights and checkpoints retrieval for inference initialization [^2] |
-| [OpenCV](https://github.com/opencv/opencv) | Open Source Computer Vision Library  | Geometric preprocessing stage in the inference pipeline |
-| [RoMa](https://github.com/naver/roma) | Lightweight library to deal with 3D rotations in PyTorch | Rotation representation conversion in 3D pose estimation |
+Performance characteristics of the pipeline are summarized below using a representative 4K video benchmark.
 
-[^1]: While PyTorch supports CPU execution, the models used in this project are so computationally intensive that CUDA is required for practical use. If you still intend to run inference on a CPU, this capability is fully supported and the pipeline will execute without modification. In that case, the NVIDIA CUDA Toolkit is never invoked and can be safely omitted from the environment without affecting inference.
+**Configuration**
+| | |
+|------------------|------------------------------------------------------------------------------------------------------------------|
+| Benchmark Video  | [Man with prosthetic leg jogging, Pexels](https://www.pexels.com/video/man-with-prosthetic-leg-jogging-8344814/) |
+| Video Resolution | 3840 × 2160 (4K)                                                                                                 |
+| Video FPS        | 25.00                                                                                                            |
+| GPU              | NVIDIA GeForce RTX 3070 Laptop GPU                                                                               |
+| PyTorch Version  | 2.5.1.post306                                                                                                    |
+| CUDA Version     | 12.6                                                                                                             |
+| Batch Size       | 30                                                                                                               |
 
-[^2]: This dependency is only required if model weights are fetched remotely from the HuggingFace Hub. If all checkpoints are available locally, `huggingface_hub` is never invoked and can be safely omitted from the environment without affecting inference.
+**Results**
+| | |
+|------------------|-----------------|
+| Processed Frames | 608             |
+| Total Time       | 36.266 sec      |
+| Latency          | 59.648 ms/frame |
+| Throughput       | 16.765 FPS      |
+| Peak VRAM Usage  | 2.82 GB         |
 
-## **Model Weights**
+> **Want more details?**  
+> For pipeline diagrams, data contracts, dependencies overview, and architectural rationale, see [the package-specific documentation](./docs/ensam3d_inference/README.md).
 
-To run inference, two model checkpoints are required.
+## **Installation**
 
-| Model | Source | Default Variant | Download |
-|-------|--------|-----------------|----------|
-| YOLO26 | [Ultralytics/YOLO26](https://huggingface.co/Ultralytics/YOLO26) | `yolo26n` | Automatic on first run |
-| SAM 3D Body | [facebook/sam-3d-body-vith](https://huggingface.co/facebook/sam-3d-body-vith) | `vit-h` | Requires accepting Meta's license agreement on HuggingFace |
+You can install the package directly from the GitHub repository:
 
-## **Installation as dependency**
+```bash
+# Install via pip
+pip install "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git"
 
-Due to the complexity of compiled dependencies in the PyTorch + CUDA ecosystem, core dependencies must be installed manually prior to installing this project. The provided `pyproject.toml` is intended solely for editable development installation and does not resolve or install runtime ML dependencies. Therefore, installing the package in isolation will not result in a functional runtime environment.
-
-Below is an example of `pixi.toml` file that defines an environment with this project and all of its required dependencies:
-
-```toml
-[workspace]
-authors = ["Sierra Arn"]
-channels = ["nvidia", "conda-forge"]
-name = "project"
-platforms = ["linux-64"]
-version = "0.1.0"
-
-[system-requirements]
-cuda = "12.8"
-
-[dependencies]
-python = "*"
-numpy = ">=1.26,<2"
-cuda-toolkit = ">=12.8.0,<12.9"
-pytorch-gpu = "*"
-torchvision = "*"
-ultralytics = "*"
-timm = "*"
-jaxtyping = "*"
-huggingface_hub = "*"
-opencv = "*"
-
-[pypi-dependencies]
-roma = "*"
-ensam3d-lib = { git = "https://github.com/Sierra-Arn/ensam3d-lib.git" }
+# Install via pixi
+pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git"
 ```
 
-## **Installation for development**
+> **Note:**  
+> This package is intentionally designed as a lightweight distribution containing only source code and package metadata [^1]. Runtime ML dependencies are not included and must be installed separately; the full dependency list is provided in the corresponding documentation section.
 
-### **I. Prerequisites**
+[^1]: Modern ML environments — especially those built around PyTorch, CUDA, Conda, and compiled libraries — are often highly sensitive to dependency resolution order and binary compatibility. Automatically enforcing installation of a predefined PyTorch/CUDA runtime via PyPI can easily destabilize an otherwise working environment by introducing incompatible CUDA builds, conflicting with Conda-managed binaries, pulling conflicting transitive dependencies, or causing ABI mismatches across compiled extensions. For this reason, the package does not ship with ML runtime dependencies and is designed to be safely integrated into existing environments without modifying their runtime stack.
+
+## **Installation for Development**
+
+### I. **Prerequisites**
 
 - [Pixi](https://pixi.sh/latest/) package manager.
+- GNU/Linux-based system on x86_64 architecture.
+- NVIDIA GPU with NVIDIA driver compatible with CUDA Toolkit >= 12.8.
 
-> **Platform note:**  
-All development and testing were performed on `linux-64`. If you're using a different platform, you’ll need to update the `platforms` list in the `pixi.toml` accordingly. In some cases, certain packages may not be available for your platform. If that happens, you might need to adjust or replace those dependencies.
+> **Note:**  
+> These prerequisites are not strict requirements but describe the environment used for development. The package can be set up in alternative environments with different package managers, operating systems, or GPU configurations if needed.
 
-### **II. Initial Setup**
+### II. **Setup**
 
 1. **Clone the repository**
 
@@ -109,9 +98,21 @@ All development and testing were performed on `linux-64`. If you're using a diff
     pixi install
     ```
 
-### **III. Developing**
+3. **Activate environment**
 
-Once the environment is ready, you can start developing and working with the codebase. Simply activate the isolated environment with `pixi shell` and begin running scripts, iterating on modules, or launching benchmarks — all dependencies and Python paths are preconfigured.
+    ```bash
+    pixi shell
+    ```
+
+### **III. Development workflow**
+
+Once the environment is activated, you can:
+- run inference pipelines
+- modify or extend modules
+- execute benchmarks
+- iterate on experiments
+
+All dependencies, Python paths, and environment variables are already configured by Pixi.
 
 ## **License**
 

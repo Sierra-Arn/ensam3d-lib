@@ -12,7 +12,10 @@ Quick Start
 >>> from ensam3d_inference import Pipeline, PreprocessorInput, DeviceType
 >>> import numpy as np
 
->>> # Initialize pipeline (weights auto-download if path is a HF repo ID)
+>>> # Initialize pipeline
+>>> # Model weights are resolved in the following order:
+>>> # 1. Local filesystem path (if exists)
+>>> # 2. HuggingFace Hub repository ID
 >>> pipeline = Pipeline(
 ...     model_path="sam-3d-body-vith",
 ...     model_device=DeviceType.CUDA,
