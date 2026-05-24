@@ -117,7 +117,3 @@ All dependencies, Python paths, and environment variables are already configured
 ## **License**
 
 This project is licensed under the [Apache License 2.0](LICENSE).
-
-YOLO26 model weights are subject to the [Ultralytics AGPL-3.0 License](https://github.com/ultralytics/ultralytics/blob/main/LICENSE).
-
-SAM 3D Body model weights are subject to the [Meta SAM License](https://github.com/facebookresearch/sam-3d-body/blob/main/LICENSE).

@@ -1,8 +1,2 @@
 Enhanced SAM 3D Body Library
 Copyright (c) 2026 Ilya Snegov (aka Sierra Arn)
-
-YOLO26 model weights are subject to the Ultralytics AGPL-3.0 License:
-https://github.com/ultralytics/ultralytics/blob/main/LICENSE
-
-SAM 3D Body model weights are subject to the Meta SAM License:
-https://github.com/facebookresearch/sam-3d-body/blob/main/LICENSE
