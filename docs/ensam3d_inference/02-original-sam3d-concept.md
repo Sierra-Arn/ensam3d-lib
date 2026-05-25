@@ -7,7 +7,7 @@
 > **SAM 3D Body: Robust Full-Body Human Mesh Recovery**  
 > by Xitong Yang, Devansh Kukreja, Don Pinkus, Anushka Sagar, Taosha Fan, Jinhyung Park, Soyong Shin, Jinkun Cao, Jiawei Liu, Nicolas Ugrinovic, Matt > Feiszli, Jitendra Malik, Piotr Dollár, and Kris Kitani
 > 
-> [arXiv:2602.15989](https://arxiv.org/abs/2602.15989?utm_source=chatgpt.com)
+> [arXiv:2602.15989](https://arxiv.org/abs/2602.15989)
 
 For implementation details, please refer to the original publication.
 

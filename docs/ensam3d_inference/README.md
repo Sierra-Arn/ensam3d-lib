@@ -13,6 +13,7 @@ Performance characteristics of the pipeline are summarized below using a represe
 |------------------|------------------------------------------------------------------------------------------------------------------|
 | Benchmark Video  | [Man with prosthetic leg jogging, Pexels](https://www.pexels.com/video/man-with-prosthetic-leg-jogging-8344814/) |
 | Video Resolution | 3840 × 2160 (4K)                                                                                                 |
+| Video Duration   | 24.32 sec (608 frames)                                                                                           |
 | Video FPS        | 25.00                                                                                                            |
 | GPU              | NVIDIA GeForce RTX 3070 Laptop GPU                                                                               |
 | PyTorch Version  | 2.5.1.post306                                                                                                    |

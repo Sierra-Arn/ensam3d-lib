@@ -118,11 +118,12 @@ def _run_benchmark(
 
 
 def _print_results(
-    processed_frames: int, 
+    processed_frames: int,
     total_time: float,
-    batch_size: int
+    batch_size: int,
+    video_path: str,
 ) -> None:
-    
+
     gpu_name = torch.cuda.get_device_name(0)
     torch_ver = torch.__version__
     cuda_ver = torch.version.cuda
@@ -131,17 +132,30 @@ def _print_results(
     ms_per_frame = (total_time / processed_frames) * 1000
     fps = processed_frames / total_time
 
-    print("\n📊 ===== Benchmark Results =====")
+    cap = cv2.VideoCapture(video_path)
+    video_fps = cap.get(cv2.CAP_PROP_FPS)
+    frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    cap.release()
+    video_duration = frame_count / video_fps if video_fps > 0 else 0
+
+    print("\n⚙️  ===== Configuration =====")
+    print(f"Video Resolution:    {width} × {height}")
+    print(f"Video Duration:      {video_duration:.2f} sec ({int(frame_count)} frames)")
+    print(f"Video FPS:           {video_fps:.2f}")
     print(f"GPU:                 {gpu_name}")
     print(f"PyTorch Version:     {torch_ver}")
     print(f"CUDA Version:        {cuda_ver}")
     print(f"Batch Size:          {batch_size}")
-    print(f"Processed frames:    {processed_frames}")
-    print(f"Total time:          {total_time:.3f} sec")
+    print()
+    print("📊 ===== Results =====")
+    print(f"Processed Frames:    {processed_frames}")
+    print(f"Total Time:          {total_time:.3f} sec")
     print(f"Latency:             {ms_per_frame:.3f} ms/frame")
     print(f"Throughput:          {fps:.3f} FPS")
     print(f"Peak VRAM Usage:     {peak_vram_gb:.2f} GB")
-    print("================================")
+    print("=====================")
 
 
 def main() -> None:
@@ -161,7 +175,12 @@ def main() -> None:
         video_path=args.video_path, 
         batch_size=args.batch_size
     )
-    _print_results(processed_frames, total_time, args.batch_size)
+    _print_results(
+        processed_frames=processed_frames,
+        total_time=total_time,
+        batch_size=args.batch_size,
+        video_path=args.video_path,
+    )
 
 
 if __name__ == "__main__":
