@@ -75,7 +75,7 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git
 
 ## **Installation for Development**
 
-### I. **Prerequisites**
+### I. Prerequisites
 
 - [Pixi](https://pixi.sh/latest/) package manager.
 - GNU/Linux-based system on x86_64 architecture.
@@ -84,7 +84,7 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git
 > **Note:**  
 > These prerequisites are not strict requirements but describe the environment used for development. The package can be set up in alternative environments with different package managers, operating systems, or GPU configurations if needed.
 
-### II. **Setup**
+### II. Setup
 
 1. **Clone the repository**
 
@@ -105,7 +105,7 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git
     pixi shell
     ```
 
-### **III. Development workflow**
+### III. Development workflow
 
 Once the environment is activated, you can:
 - run inference pipelines
@@ -117,4 +117,4 @@ All dependencies, Python paths, and environment variables are already configured
 
 ## **License**
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is licensed under the [Apache License, Version 2.0](LICENSE).
