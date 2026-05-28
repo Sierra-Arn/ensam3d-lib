@@ -1,4 +1,4 @@
-# **Enhanced SAM 3D Body Library**
+# Enhanced SAM 3D Body Library
 
 > *Collection of production-oriented inference pipelines based on [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body) for 3D human body pose and shape estimation.*
 
@@ -24,7 +24,7 @@ ensam3d-lib/
                                 # for the local Pixi development environment
 ```
 
-## **Available Subpackages**
+## Available Subpackages
 
 ### I. `ensam3d_inference`
 
@@ -56,7 +56,7 @@ Performance characteristics of the pipeline are summarized below using a represe
 > **Want more details?**  
 > For pipeline diagrams, data contracts, dependencies overview, and architectural rationale, see [the package-specific documentation](./docs/ensam3d_inference/README.md).
 
-## **Installation**
+## Installation
 
 You can install the package directly from the GitHub repository:
 
@@ -73,13 +73,13 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git
 
 [^1]: Modern ML environments — especially those built around PyTorch, CUDA, Conda, and compiled libraries — are often highly sensitive to dependency resolution order and binary compatibility. Automatically enforcing installation of a predefined PyTorch/CUDA runtime via PyPI can easily destabilize an otherwise working environment by introducing incompatible CUDA builds, conflicting with Conda-managed binaries, pulling conflicting transitive dependencies, or causing ABI mismatches across compiled extensions. For this reason, the package does not ship with ML runtime dependencies and is designed to be safely integrated into existing environments without modifying their runtime stack.
 
-## **Installation for Development**
+## Installation for Development
 
 ### I. Prerequisites
 
 - [Pixi](https://pixi.sh/latest/) package manager.
-- GNU/Linux-based system on x86_64 architecture.
-- NVIDIA GPU with NVIDIA driver compatible with CUDA Toolkit >= 12.8.
+- GNU/Linux-based system on `x86_64` architecture.
+- NVIDIA GPU with NVIDIA driver compatible with CUDA Toolkit `>= 12.8`.
 
 > **Note:**  
 > These prerequisites are not strict requirements but describe the environment used for development. The package can be set up in alternative environments with different package managers, operating systems, or GPU configurations if needed.
@@ -108,13 +108,13 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git
 ### III. Development workflow
 
 Once the environment is activated, you can:
-- run inference pipelines
-- modify or extend modules
-- execute benchmarks
-- iterate on experiments
+- run inference pipelines,
+- modify or extend modules,
+- execute benchmarks,
+- iterate on experiments,
 
-All dependencies, Python paths, and environment variables are already configured by Pixi.
+— all dependencies, Python paths, and environment variables are already configured by Pixi.
 
-## **License**
+## License
 
 This project is licensed under the [Apache License, Version 2.0](LICENSE).
