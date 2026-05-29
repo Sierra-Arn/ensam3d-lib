@@ -9,10 +9,11 @@ ensam3d-lib/
 ├── src/                        # Standard src-layout; each subpackage is a self-contained, 
 │                               # production-ready reimplementation of SAM 3D Body
 │
-├── docs/                       # Conceptual & architectural documentation — each subdirectory 
+├── docs/                       # Technical documentation — each subdirectory 
 │                               # mirrors its src/ counterpart with subpackage overview, 
-│                               # design rationale, pipeline diagrams, 
-│                               # data contracts, installation guide, etc.
+│                               # reference implementation analysis, production-oriented 
+│                               # architectural changes, runtime pipeline design, 
+│                               # package structure, dependencies, and installation.
 │
 ├── pyproject.toml              # Standard Python project manifest defining 
 │                               # build system and package metadata
@@ -54,7 +55,7 @@ Performance characteristics of the pipeline are summarized below using a represe
 | Peak VRAM Usage  | 2.82 GB         |
 
 > **Want more details?**  
-> For pipeline diagrams, data contracts, dependencies overview, and architectural rationale, see [the package-specific documentation](./docs/ensam3d_inference/README.md).
+> For the full technical documentation — including system concepts, reference implementation limitations, production-oriented engineering changes, runtime pipeline diagrams, data contracts, dependencies, and installation — see [the package-specific documentation](./docs/ensam3d_inference/README.md).
 
 ## Installation
 

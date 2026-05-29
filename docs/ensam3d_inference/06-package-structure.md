@@ -2,11 +2,13 @@
 
 > *This document describes the logical organization of the codebase following the stage-based execution model defined in the system architecture.*
 
-## **Directory Layout**
+## Directory Layout
 
-As introduced in the engineering decisions section, the original research codebase grouped logic by technical artifact type rather than execution stage, making the runtime graph difficult to navigate and increasing cognitive overhead during code exploration.
+The previous section defined the runtime architecture as a sequence of explicit execution stages with clearly defined responsibilities and typed data contracts. This section maps that runtime architecture onto the repository structure.
 
-In contrast, `ensam3d_inference` organizes the codebase around the logical runtime stages defined in the system architecture, grouping related components by execution responsibility rather than implementation type, thereby making the execution flow explicit, improving code navigation, and reducing cognitive overhead during development and maintenance.
+The original SAM 3D Body research codebase organized modules by technical artifact type rather than execution stage, which made the runtime flow difficult to trace and increased cognitive overhead during code exploration.
+
+In contrast, `ensam3d_inference` organizes the repository around the runtime stages defined in the system architecture. Related components are grouped by execution responsibility rather than implementation type, making the execution flow explicit, improving code navigation, and reducing cognitive overhead during development and maintenance.
 
 ```bash
 ensam3d_inference/
@@ -28,7 +30,7 @@ ensam3d_inference/
 └── examples/
 ```
 
-## **Component Overview**
+## Component Overview
 
 > **Note:** all files include inline comments describing backend-specific decisions and non-obvious implementation details.
 

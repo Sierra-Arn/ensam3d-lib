@@ -1,8 +1,8 @@
 # **`ensam3d_inference/`**
 
-> *This directory contains the full technical documentation for the `ensam3d_inference` package, covering system architecture, runtime pipeline, implementation decisions, dependencies, installation, and usage. The documentation is structured to provide a clear, reproducible, and engineering-level understanding of the inference flow.*
+> *This directory contains the full technical documentation for the `ensam3d_inference` package, including the system concept, the original SAM 3D Body reference architecture, practical integration issues identified in the reference implementation, the architectural and engineering changes introduced for production inference, runtime pipeline design, codebase structure, dependencies, installation, and usage. The documentation is organized to provide a clear, reproducible, and engineering-focused understanding of the system and its inference flow.*
 
-## I. **Package Overview**
+## I. Package Overview
 
 This package is a production-oriented, inference-only reimplementation of the original research-oriented SAM 3D Body architecture. It is designed for high-throughput 3D human pose estimation in video streams, where each frame is assumed to contain at most one primary person.
 
@@ -31,30 +31,30 @@ Performance characteristics of the pipeline are summarized below using a represe
 
 To reproduce this benchmark on your hardware, refer to [ensam3d_inference.examples.benchmarking](../../src/ensam3d_inference/examples/benchmarking.py).
 
-## II. **Documentation Overview**
+## II. Documentation Overview
 
 This section provides a structured guide to the documentation layout of the `ensam3d_inference` package. Each file focuses on a specific layer of abstraction, ranging from high-level conceptual design to low-level installation and runtime setup.
 
-- If you want to understand the **core idea and task formulation of the system**, refer to  
-    [01-ensam3d-concept.md](01-ensam3d-concept.md)
+- To understand the **core idea and task formulation of the system**, see
+    [01-ensam3d-concept.md](01-ensam3d-concept.md).
 
-- If you want to review the **original SAM 3D Body architecture that the project is based on**, refer to  
-    [02-original-sam3d-concept.md](02-original-sam3d-concept.md)
+- To review the **original SAM 3D Body architecture used as the foundation of this project**, see
+    [02-sam3d-concept.md](02-sam3d-concept.md).
 
-- If you want to understand the **architectural modifications applied to the original model**, refer to  
-    [03-architectural-changes.md](03-architectural-changes.md)
+- To understand the **practical issues encountered when adapting the reference implementation for production inference**, see
+    [03-sam3d-issues.md](03-sam3d-issues.md).
 
-- If you want to understand the **engineering-level design decisions and trade-offs**, refer to  
-    [04-engineering-decisions.md](04-engineering-decisions.md)
+- To review the **architectural and engineering changes introduced in the production pipeline**, see
+    [04-enhancements.md](04-enhancements.md).
 
-- If you want to study the **runtime system architecture and execution graph**, refer to  
-    [05-system-architecture.md](05-system-architecture.md)
+- To study the **runtime architecture and execution graph**, see
+    [05-system-architecture.md](05-system-architecture.md).
 
-- If you want to understand the **codebase organization and package structure**, refer to  
-    [06-package-structure.md](06-package-structure.md)
+- To understand the **repository layout and package structure**, see
+    [06-package-structure.md](06-package-structure.md).
 
-- If you want to review the **dependency stack and external requirements**, refer to  
-    [07-dependencies.md](07-dependencies.md)
+- To review the **dependency stack and required external assets**, see
+    [07-dependencies.md](07-dependencies.md).
 
-- If you want to **install, configure, and run the project**, refer to  
-    [08-installation-guide.md](08-installation-guide.md)
+- To **install and run the project**, see
+    [08-installation-guide.md](08-installation-guide.md).

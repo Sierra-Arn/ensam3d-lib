@@ -2,20 +2,20 @@
 
 > *This document defines the concrete runtime architecture of the Enhanced SAM 3D Body Inference pipeline.*
 
-## **Overview**
+## Overview
 
-Building on the conceptual design, architectural modifications, and engineering decisions described in previous sections, this document formalizes the production inference system as a set of explicitly defined components and execution stages. 
+The previous sections established the conceptual architecture, identified the constraints of the reference implementation, and defined the engineering changes required for production inference. This section formalizes those design decisions as the concrete runtime architecture of the Enhanced SAM 3D Body Inference pipeline.
 
-The document specifies: 
-- component responsibilities, 
-- orchestration, 
-- typed inter-stage data contracts data contracts [^1].
+The document specifies:
+- component responsibilities,
+- execution-stage orchestration,
+- typed inter-stage data contracts. [^1]
 
 [^1]: Only the core data contracts are documented in this section. For the complete set of internal types and structures, refer to the source code, where each type is fully annotated and documented through inline comments.
 
 
 
-## **`Pipeline` Decomposition**
+## `Pipeline` Decomposition
 
 As introduced in the conceptual overview, the inference workflow decomposes into four sequential stages:
 
@@ -30,7 +30,7 @@ This modular split follows the stage-based organization principles described in 
 
 
 
-## **`Pipeline` Architecture**
+## `Pipeline` Architecture
 
 The `Pipeline` serves as the top-level orchestration layer of the `ensam3d_inference`. It coordinates execution across preprocessing and inference modules, processes temporally ordered video frames, and maintains strict alignment between input frames and output predictions.
 
@@ -70,7 +70,7 @@ flowchart TD
 
 
 
-## **`Preprocessor` Architecture**
+## `Preprocessor` Architecture
 
 The `Preprocessor` serves as the first execution stage of the `Pipeline`. It is responsible for converting raw RGB video frames into a structured representation suitable for downstream 3D pose estimation. This includes person detection, canonical crop generation, and construction of geometric metadata required for camera-aware inference.
 
@@ -121,7 +121,7 @@ flowchart TD
 
 
 
-## **`Detector` Architecture**
+## `Detector` Architecture
 
 The `Detector` serves as the initial perception stage of the `Pipeline`. It performs batched person detection on RGB frames, selects the highest-confidence bounding box per frame, and produces frame-aligned outputs with explicit handling of missing detections.
 
@@ -163,7 +163,7 @@ flowchart TD
 
 
 
-## **`Engine` Decomposition**
+## `Engine` Decomposition
 
 As described in the original SAM 3D Body architecture overview, the pose estimation stage combines visual feature extraction, transformer-based decoding, and geometric reconstruction into a unified inference graph.
 
@@ -176,7 +176,7 @@ This separation isolates the computationally expensive image encoding stage from
 
 
 
-## **`Engine` Architecture**
+## `Engine` Architecture
 
 The `Engine` serves as the core execution stage of the `Pipeline`. It consumes preprocessed canonical image crops together with geometric metadata, performs backbone feature extraction, executes transformer-based pose decoding, and reconstructs the final 3D body representation in camera and image space.
 
@@ -212,7 +212,7 @@ flowchart TD
 
 
 
-## **`FeatureExtractor` Architecture**
+## `FeatureExtractor` Architecture
 
 The `FeatureExtractor` serves as the visual encoding stage of the `Engine`. It converts canonical RGB crops into dense spatial feature representations and augments them with explicit camera-aware geometric context derived from affine transforms and intrinsic matrices. The resulting feature maps are consumed by the downstream transformer decoder during pose reconstruction.
 
@@ -251,7 +251,7 @@ flowchart TD
 
 
 
-## **`Backbone` Architecture**
+## `Backbone` Architecture
 
 The `Backbone` serves as the primary visual representation module of the `FeatureExtractor`. It transforms normalized RGB image crops into dense spatial embeddings using a Vision Transformer architecture composed of patch projection, positional encoding, stacked transformer blocks, and feature-grid reconstruction.
 
@@ -288,7 +288,7 @@ flowchart TD
 
 
 
-## **`CameraEncoder` Architecture**
+## `CameraEncoder` Architecture
 
 The `CameraEncoder` serves as the geometric conditioning stage of the `FeatureExtractor`. It augments backbone feature maps with explicit camera-aware spatial context derived from affine transformations, intrinsic matrices, and image resolution metadata. This enables downstream transformer layers to reason about perspective and scale directly in feature space rather than learning these relationships implicitly.
 
@@ -330,7 +330,7 @@ flowchart TD
 
 
 
-## **`PoseEstimator` Architecture**
+## `PoseEstimator` Architecture
 
 The `PoseEstimator` serves as the iterative reconstruction stage of the `Engine`. It consumes camera-aware backbone feature maps together with geometric metadata, performs transformer-based cross-attention decoding, progressively refines pose representations across multiple decoder layers, and reconstructs the final 3D body representation through geometric projection and regression heads.
 
@@ -379,7 +379,7 @@ flowchart TD
 
 
 
-## **`PromptableDecoder` Architecture**
+## `PromptableDecoder` Architecture
 
 The `PromptableDecoder` serves as the iterative transformer decoding core of the `PoseEstimator`. It consumes pose token sequences together with image feature embeddings, performs repeated cross-attention refinement across stacked decoder layers, and progressively updates pose representations through intermediate geometric feedback and token refresh operations.
 
@@ -427,7 +427,7 @@ flowchart TD
 
 
 
-## **`MHRHead` Architecture**
+## `MHRHead` Architecture
 
 The `MHRHead` serves as the geometric reconstruction stage of the `PoseEstimator`. It converts decoder pose tokens into structured body parameters, reconstructs the articulated human mesh through the MHR solver, and produces 3D skeletal and mesh representations used for downstream projection and visualization.
 
@@ -492,7 +492,7 @@ flowchart TD
 
 
 
-## **`PerspectiveHead` Architecture**
+## `PerspectiveHead` Architecture
 
 The `PerspectiveHead` serves as the camera parameter regression stage of the `PoseEstimator`. It converts decoder pose tokens into weak-perspective camera parameters used for geometric reprojection of reconstructed 3D body representations back into image space.
 

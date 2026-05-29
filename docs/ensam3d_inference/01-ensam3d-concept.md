@@ -2,7 +2,11 @@
 
 > *This document describes the high-level conceptual architecture of the Enhanced SAM 3D Body Inference package.*
 
-## **Task**
+## Task and First Decisions
+
+When I started this project, I was given a concrete objective: build a production-grade inference pipeline for 3D human pose estimation from monocular video. Before selecting a neural architecture, defining the preprocessing strategy, or committing to any inference routing logic, I first needed to formalize exactly what the system must do — and, just as importantly, what falls outside its scope.
+
+Stripping away all implementation details, I formalized the task as the following input–output contract:
 
 | Component | Description |
 | ----------|-------------|
@@ -10,7 +14,7 @@
 | **Output** | A sequence of pose estimations. Each element is either: <br>- a structured object containing 3D keypoints and their corresponding 2D projections, or <br>- `None` if no person is detected. |
 | **Contract** | 1. The output length must exactly match the input length. <br>(i.e. `estimation[i]` always corresponds to `frame[i]`). <br>2. At most one primary subject is assumed per frame. |
 
-## **Solution**
+Based on that task definition, I made the following foundational design decisions:
 
 | Decision | Rationale |
 |----------|-----------|
@@ -21,9 +25,9 @@
 
 [^1]: The trade-off of deep learning models — higher computational cost and memory usage — is accepted here. Since there are no hard constraints on deployment hardware, the additional computational and memory overhead of deep learning models is considered acceptable
 
-## **Pipeline Blueprint**
+## Pipeline Blueprint
 
-Based on the task definition and the design decisions above, we can outline a preliminary pipeline architecture. The system is structured as a staged processing flow, where each frame passes through person detection, canonical cropping, neural inference, and coordinate reprojection. Frames without valid detections bypass the model and are stored as `None`, ensuring strict 1:1 index alignment between input and output sequences.
+With the task constraints and foundational decisions established, I needed to translate them into a concrete execution graph. I organized the flow as a strict sequential pipeline, where each frame passes through person detection, canonical cropping, neural inference, and coordinate reprojection. Frames without valid detections bypass the model and are stored as `None`, ensuring strict 1:1 index alignment between input and output sequences.
 
 ```mermaid
 flowchart TD
@@ -50,3 +54,7 @@ flowchart TD
     Loop -->|Yes| Fetch
     Loop -->|No| Output([Sequence of either pose estimations or None])
 ```
+
+## Next Steps
+
+With the task formulation and foundational decisions in place, I could have started building the model from scratch. But in production engineering, reinventing the wheel is rarely justified when high-quality, state-of-the-art components already exist. Building a competitive 3D pose estimator from zero would require months of architecture search, dataset curation, and representation learning — effort better spent on pipeline reliability, latency optimization, and maintainability. Rather than training a competitive 3D pose estimator from scratch, I chose to build on an existing pre-trained foundation and adapt it to the project’s requirements. This shifts the effort from model development toward building a reliable, deterministic inference pipeline around a proven model.
