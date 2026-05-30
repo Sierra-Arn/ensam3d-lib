@@ -13,7 +13,109 @@
 # limitations under the License.
 
 # src/ensam3d_inference/examples/keypoints.py
+from enum import StrEnum
 from typing import NamedTuple
+
+
+class KeypointName(StrEnum):
+    """
+    Enumeration of semantic keypoint names for type-safe references.
+
+    Each member corresponds to a specific anatomical landmark with the
+    value matching the name field in KEYPOINTS. Using this enum instead
+    of string literals provides compile-time safety and IDE
+    autocompletion when referencing keypoints in definitions.
+    """
+    
+    # Head
+    NOSE = "nose"
+    LEFT_EYE = "left_eye"
+    RIGHT_EYE = "right_eye"
+    LEFT_EAR = "left_ear"
+    RIGHT_EAR = "right_ear"
+    
+    # Shoulders
+    LEFT_SHOULDER = "left_shoulder"
+    RIGHT_SHOULDER = "right_shoulder"
+    
+    # Arms
+    LEFT_ELBOW = "left_elbow"
+    RIGHT_ELBOW = "right_elbow"
+    LEFT_WRIST = "left_wrist"
+    RIGHT_WRIST = "right_wrist"
+    LEFT_OLECRANON = "left_olecranon"
+    RIGHT_OLECRANON = "right_olecranon"
+    LEFT_CUBITAL_FOSSA = "left_cubital_fossa"
+    RIGHT_CUBITAL_FOSSA = "right_cubital_fossa"
+    LEFT_ACROMION = "left_acromion"
+    RIGHT_ACROMION = "right_acromion"
+    
+    # Hips
+    LEFT_HIP = "left_hip"
+    RIGHT_HIP = "right_hip"
+    
+    # Legs
+    LEFT_KNEE = "left_knee"
+    RIGHT_KNEE = "right_knee"
+    LEFT_ANKLE = "left_ankle"
+    RIGHT_ANKLE = "right_ankle"
+    
+    # Left foot
+    LEFT_BIG_TOE = "left_big_toe"
+    LEFT_SMALL_TOE = "left_small_toe"
+    LEFT_HEEL = "left_heel"
+    
+    # Right foot
+    RIGHT_BIG_TOE = "right_big_toe"
+    RIGHT_SMALL_TOE = "right_small_toe"
+    RIGHT_HEEL = "right_heel"
+    
+    # Right hand
+    RIGHT_THUMB_TIP = "right_thumb_tip"
+    RIGHT_THUMB_FIRST_JOINT = "right_thumb_first_joint"
+    RIGHT_THUMB_SECOND_JOINT = "right_thumb_second_joint"
+    RIGHT_THUMB_THIRD_JOINT = "right_thumb_third_joint"
+    RIGHT_INDEX_TIP = "right_index_tip"
+    RIGHT_INDEX_FIRST_JOINT = "right_index_first_joint"
+    RIGHT_INDEX_SECOND_JOINT = "right_index_second_joint"
+    RIGHT_INDEX_THIRD_JOINT = "right_index_third_joint"
+    RIGHT_MIDDLE_TIP = "right_middle_tip"
+    RIGHT_MIDDLE_FIRST_JOINT = "right_middle_first_joint"
+    RIGHT_MIDDLE_SECOND_JOINT = "right_middle_second_joint"
+    RIGHT_MIDDLE_THIRD_JOINT = "right_middle_third_joint"
+    RIGHT_RING_TIP = "right_ring_tip"
+    RIGHT_RING_FIRST_JOINT = "right_ring_first_joint"
+    RIGHT_RING_SECOND_JOINT = "right_ring_second_joint"
+    RIGHT_RING_THIRD_JOINT = "right_ring_third_joint"
+    RIGHT_PINKY_TIP = "right_pinky_tip"
+    RIGHT_PINKY_FIRST_JOINT = "right_pinky_first_joint"
+    RIGHT_PINKY_SECOND_JOINT = "right_pinky_second_joint"
+    RIGHT_PINKY_THIRD_JOINT = "right_pinky_third_joint"
+    
+    # Left hand
+    LEFT_THUMB_TIP = "left_thumb_tip"
+    LEFT_THUMB_FIRST_JOINT = "left_thumb_first_joint"
+    LEFT_THUMB_SECOND_JOINT = "left_thumb_second_joint"
+    LEFT_THUMB_THIRD_JOINT = "left_thumb_third_joint"
+    LEFT_INDEX_TIP = "left_index_tip"
+    LEFT_INDEX_FIRST_JOINT = "left_index_first_joint"
+    LEFT_INDEX_SECOND_JOINT = "left_index_second_joint"
+    LEFT_INDEX_THIRD_JOINT = "left_index_third_joint"
+    LEFT_MIDDLE_TIP = "left_middle_tip"
+    LEFT_MIDDLE_FIRST_JOINT = "left_middle_first_joint"
+    LEFT_MIDDLE_SECOND_JOINT = "left_middle_second_joint"
+    LEFT_MIDDLE_THIRD_JOINT = "left_middle_third_joint"
+    LEFT_RING_TIP = "left_ring_tip"
+    LEFT_RING_FIRST_JOINT = "left_ring_first_joint"
+    LEFT_RING_SECOND_JOINT = "left_ring_second_joint"
+    LEFT_RING_THIRD_JOINT = "left_ring_third_joint"
+    LEFT_PINKY_TIP = "left_pinky_tip"
+    LEFT_PINKY_FIRST_JOINT = "left_pinky_first_joint"
+    LEFT_PINKY_SECOND_JOINT = "left_pinky_second_joint"
+    LEFT_PINKY_THIRD_JOINT = "left_pinky_third_joint"
+    
+    # Neck
+    NECK = "neck"
 
 
 class KeypointInfo(NamedTuple):
@@ -22,15 +124,15 @@ class KeypointInfo(NamedTuple):
 
     Attributes
     ----------
-    name : str
-        Human-readable keypoint identifier corresponding to the semantic
-        joint represented by the model output (e.g. "left_knee").
+    name : KeypointName
+        Semantic keypoint identifier corresponding to the anatomical
+        landmark represented by the model output.
     color : tuple of int
         RGB visualization color associated with the keypoint, represented
         as (R, G, B) with each channel in the range [0, 255].
     """
 
-    name: str
+    name: KeypointName
     color: tuple[int, int, int]
 
 
@@ -57,76 +159,76 @@ class SkeletonLink(NamedTuple):
 
 
 KEYPOINTS: list[KeypointInfo] = [
-    KeypointInfo(name="nose",                           color=(51, 153, 255)),
-    KeypointInfo(name="left_eye",                       color=(51, 153, 255)),
-    KeypointInfo(name="right_eye",                      color=(51, 153, 255)),
-    KeypointInfo(name="left_ear",                       color=(51, 153, 255)),
-    KeypointInfo(name="right_ear",                      color=(51, 153, 255)),
-    KeypointInfo(name="left_shoulder",                  color=(51, 153, 255)),
-    KeypointInfo(name="right_shoulder",                 color=(51, 153, 255)),
-    KeypointInfo(name="left_elbow",                     color=(51, 153, 255)),
-    KeypointInfo(name="right_elbow",                    color=(51, 153, 255)),
-    KeypointInfo(name="left_hip",                       color=(51, 153, 255)),
-    KeypointInfo(name="right_hip",                      color=(51, 153, 255)),
-    KeypointInfo(name="left_knee",                      color=(51, 153, 255)),
-    KeypointInfo(name="right_knee",                     color=(51, 153, 255)),
-    KeypointInfo(name="left_ankle",                     color=(51, 153, 255)),
-    KeypointInfo(name="right_ankle",                    color=(51, 153, 255)),
-    KeypointInfo(name="left_big_toe",                   color=(51, 153, 255)),
-    KeypointInfo(name="left_small_toe",                 color=(51, 153, 255)),
-    KeypointInfo(name="left_heel",                      color=(51, 153, 255)),
-    KeypointInfo(name="right_big_toe",                  color=(51, 153, 255)),
-    KeypointInfo(name="right_small_toe",                color=(51, 153, 255)),
-    KeypointInfo(name="right_heel",                     color=(51, 153, 255)),
-    KeypointInfo(name="right_thumb_tip",                color=(51, 153, 255)),
-    KeypointInfo(name="right_thumb_first_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="right_thumb_second_joint",       color=(51, 153, 255)),
-    KeypointInfo(name="right_thumb_third_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="right_index_tip",                color=(51, 153, 255)),
-    KeypointInfo(name="right_index_first_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="right_index_second_joint",       color=(51, 153, 255)),
-    KeypointInfo(name="right_index_third_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="right_middle_tip",               color=(51, 153, 255)),
-    KeypointInfo(name="right_middle_first_joint",       color=(51, 153, 255)),
-    KeypointInfo(name="right_middle_second_joint",      color=(51, 153, 255)),
-    KeypointInfo(name="right_middle_third_joint",       color=(51, 153, 255)),
-    KeypointInfo(name="right_ring_tip",                 color=(51, 153, 255)),
-    KeypointInfo(name="right_ring_first_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="right_ring_second_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="right_ring_third_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="right_pinky_tip",                color=(51, 153, 255)),
-    KeypointInfo(name="right_pinky_first_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="right_pinky_second_joint",       color=(51, 153, 255)),
-    KeypointInfo(name="right_pinky_third_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="right_wrist",                    color=(51, 153, 255)),
-    KeypointInfo(name="left_thumb_tip",                 color=(51, 153, 255)),
-    KeypointInfo(name="left_thumb_first_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="left_thumb_second_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="left_thumb_third_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="left_index_tip",                 color=(51, 153, 255)),
-    KeypointInfo(name="left_index_first_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="left_index_second_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="left_index_third_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="left_middle_tip",                color=(51, 153, 255)),
-    KeypointInfo(name="left_middle_first_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="left_middle_second_joint",       color=(51, 153, 255)),
-    KeypointInfo(name="left_middle_third_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="left_ring_tip",                  color=(51, 153, 255)),
-    KeypointInfo(name="left_ring_first_joint",          color=(51, 153, 255)),
-    KeypointInfo(name="left_ring_second_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="left_ring_third_joint",          color=(51, 153, 255)),
-    KeypointInfo(name="left_pinky_tip",                 color=(51, 153, 255)),
-    KeypointInfo(name="left_pinky_first_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="left_pinky_second_joint",        color=(51, 153, 255)),
-    KeypointInfo(name="left_pinky_third_joint",         color=(51, 153, 255)),
-    KeypointInfo(name="left_wrist",                     color=(51, 153, 255)),
-    KeypointInfo(name="left_olecranon",                 color=(51, 153, 255)),
-    KeypointInfo(name="right_olecranon",                color=(51, 153, 255)),
-    KeypointInfo(name="left_cubital_fossa",             color=(51, 153, 255)),
-    KeypointInfo(name="right_cubital_fossa",            color=(51, 153, 255)),
-    KeypointInfo(name="left_acromion",                  color=(51, 153, 255)),
-    KeypointInfo(name="right_acromion",                 color=(51, 153, 255)),
-    KeypointInfo(name="neck",                           color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.NOSE,                           color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.LEFT_EYE,                       color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_EYE,                      color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.LEFT_EAR,                       color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_EAR,                      color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.LEFT_SHOULDER,                  color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_SHOULDER,                 color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.LEFT_ELBOW,                     color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_ELBOW,                    color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.LEFT_HIP,                       color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_HIP,                      color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.LEFT_KNEE,                      color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_KNEE,                     color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.LEFT_ANKLE,                     color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_ANKLE,                    color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.LEFT_BIG_TOE,                   color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.LEFT_SMALL_TOE,                 color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.LEFT_HEEL,                      color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_BIG_TOE,                  color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_SMALL_TOE,                color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_HEEL,                     color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_THUMB_TIP,                color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_THUMB_FIRST_JOINT,        color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_THUMB_SECOND_JOINT,       color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_THUMB_THIRD_JOINT,        color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_INDEX_TIP,                color=(255, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_INDEX_FIRST_JOINT,        color=(255, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_INDEX_SECOND_JOINT,       color=(255, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_INDEX_THIRD_JOINT,        color=(255, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_MIDDLE_TIP,               color=(102, 178, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_MIDDLE_FIRST_JOINT,       color=(102, 178, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_MIDDLE_SECOND_JOINT,      color=(102, 178, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_MIDDLE_THIRD_JOINT,       color=(102, 178, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_RING_TIP,                 color=(255, 51, 51)),
+    KeypointInfo(name=KeypointName.RIGHT_RING_FIRST_JOINT,         color=(255, 51, 51)),
+    KeypointInfo(name=KeypointName.RIGHT_RING_SECOND_JOINT,        color=(255, 51, 51)),
+    KeypointInfo(name=KeypointName.RIGHT_RING_THIRD_JOINT,         color=(255, 51, 51)),
+    KeypointInfo(name=KeypointName.RIGHT_PINKY_TIP,                color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_PINKY_FIRST_JOINT,        color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_PINKY_SECOND_JOINT,       color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_PINKY_THIRD_JOINT,        color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_WRIST,                    color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.LEFT_THUMB_TIP,                 color=(0, 204, 0)),
+    KeypointInfo(name=KeypointName.LEFT_THUMB_FIRST_JOINT,         color=(0, 204, 0)),
+    KeypointInfo(name=KeypointName.LEFT_THUMB_SECOND_JOINT,        color=(0, 204, 0)),
+    KeypointInfo(name=KeypointName.LEFT_THUMB_THIRD_JOINT,         color=(0, 204, 0)),
+    KeypointInfo(name=KeypointName.LEFT_INDEX_TIP,                 color=(144, 238, 144)),
+    KeypointInfo(name=KeypointName.LEFT_INDEX_FIRST_JOINT,         color=(144, 238, 144)),
+    KeypointInfo(name=KeypointName.LEFT_INDEX_SECOND_JOINT,        color=(144, 238, 144)),
+    KeypointInfo(name=KeypointName.LEFT_INDEX_THIRD_JOINT,         color=(144, 238, 144)),
+    KeypointInfo(name=KeypointName.LEFT_MIDDLE_TIP,                color=(0, 255, 127)),
+    KeypointInfo(name=KeypointName.LEFT_MIDDLE_FIRST_JOINT,        color=(0, 255, 127)),
+    KeypointInfo(name=KeypointName.LEFT_MIDDLE_SECOND_JOINT,       color=(0, 255, 127)),
+    KeypointInfo(name=KeypointName.LEFT_MIDDLE_THIRD_JOINT,        color=(0, 255, 127)),
+    KeypointInfo(name=KeypointName.LEFT_RING_TIP,                  color=(107, 142, 35)),
+    KeypointInfo(name=KeypointName.LEFT_RING_FIRST_JOINT,          color=(107, 142, 35)),
+    KeypointInfo(name=KeypointName.LEFT_RING_SECOND_JOINT,         color=(107, 142, 35)),
+    KeypointInfo(name=KeypointName.LEFT_RING_THIRD_JOINT,          color=(107, 142, 35)),
+    KeypointInfo(name=KeypointName.LEFT_PINKY_TIP,                 color=(152, 251, 152)),
+    KeypointInfo(name=KeypointName.LEFT_PINKY_FIRST_JOINT,         color=(152, 251, 152)),
+    KeypointInfo(name=KeypointName.LEFT_PINKY_SECOND_JOINT,        color=(152, 251, 152)),
+    KeypointInfo(name=KeypointName.LEFT_PINKY_THIRD_JOINT,         color=(152, 251, 152)),
+    KeypointInfo(name=KeypointName.LEFT_WRIST,                     color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.LEFT_OLECRANON,                 color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_OLECRANON,                color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.LEFT_CUBITAL_FOSSA,             color=(0, 255, 0)),
+    KeypointInfo(name=KeypointName.RIGHT_CUBITAL_FOSSA,            color=(255, 128, 0)),
+    KeypointInfo(name=KeypointName.LEFT_ACROMION,                  color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.RIGHT_ACROMION,                 color=(51, 153, 255)),
+    KeypointInfo(name=KeypointName.NECK,                           color=(51, 153, 255)),
 ]
 """
 Keypoint descriptors for the 70 MHR body keypoints.
@@ -163,26 +265,26 @@ SKELETON: list[SkeletonLink] = [
     SkeletonLink(start=14, end=18,  color=(255, 128, 0)),    # right_ankle -> right_big_toe
     SkeletonLink(start=14, end=19,  color=(255, 128, 0)),    # right_ankle -> right_small_toe
     SkeletonLink(start=14, end=20,  color=(255, 128, 0)),    # right_ankle -> right_heel
-    SkeletonLink(start=62, end=45,  color=(255, 128, 0)),    # left_wrist -> left_thumb_third_joint
-    SkeletonLink(start=45, end=44,  color=(255, 128, 0)),    # left_thumb_third_joint -> left_thumb_second_joint
-    SkeletonLink(start=44, end=43,  color=(255, 128, 0)),    # left_thumb_second_joint -> left_thumb_first_joint
-    SkeletonLink(start=43, end=42,  color=(255, 128, 0)),    # left_thumb_first_joint -> left_thumb_tip
-    SkeletonLink(start=62, end=49,  color=(255, 153, 255)),  # left_wrist -> left_index_third_joint
-    SkeletonLink(start=49, end=48,  color=(255, 153, 255)),  # left_index_third_joint -> left_index_second_joint
-    SkeletonLink(start=48, end=47,  color=(255, 153, 255)),  # left_index_second_joint -> left_index_first_joint
-    SkeletonLink(start=47, end=46,  color=(255, 153, 255)),  # left_index_first_joint -> left_index_tip
-    SkeletonLink(start=62, end=53,  color=(102, 178, 255)),  # left_wrist -> left_middle_third_joint
-    SkeletonLink(start=53, end=52,  color=(102, 178, 255)),  # left_middle_third_joint -> left_middle_second_joint
-    SkeletonLink(start=52, end=51,  color=(102, 178, 255)),  # left_middle_second_joint -> left_middle_first_joint
-    SkeletonLink(start=51, end=50,  color=(102, 178, 255)),  # left_middle_first_joint -> left_middle_tip
-    SkeletonLink(start=62, end=57,  color=(255, 51, 51)),    # left_wrist -> left_ring_third_joint
-    SkeletonLink(start=57, end=56,  color=(255, 51, 51)),    # left_ring_third_joint -> left_ring_second_joint
-    SkeletonLink(start=56, end=55,  color=(255, 51, 51)),    # left_ring_second_joint -> left_ring_first_joint
-    SkeletonLink(start=55, end=54,  color=(255, 51, 51)),    # left_ring_first_joint -> left_ring_tip
-    SkeletonLink(start=62, end=61,  color=(0, 255, 0)),      # left_wrist -> left_pinky_third_joint
-    SkeletonLink(start=61, end=60,  color=(0, 255, 0)),      # left_pinky_third_joint -> left_pinky_second_joint
-    SkeletonLink(start=60, end=59,  color=(0, 255, 0)),      # left_pinky_second_joint -> left_pinky_first_joint
-    SkeletonLink(start=59, end=58,  color=(0, 255, 0)),      # left_pinky_first_joint -> left_pinky_tip
+    SkeletonLink(start=62, end=45,  color=(0, 204, 0)),      # left_wrist -> left_thumb_third_joint
+    SkeletonLink(start=45, end=44,  color=(0, 204, 0)),      # left_thumb_third_joint -> left_thumb_second_joint
+    SkeletonLink(start=44, end=43,  color=(0, 204, 0)),      # left_thumb_second_joint -> left_thumb_first_joint
+    SkeletonLink(start=43, end=42,  color=(0, 204, 0)),      # left_thumb_first_joint -> left_thumb_tip
+    SkeletonLink(start=62, end=49,  color=(144, 238, 144)),  # left_wrist -> left_index_third_joint
+    SkeletonLink(start=49, end=48,  color=(144, 238, 144)),  # left_index_third_joint -> left_index_second_joint
+    SkeletonLink(start=48, end=47,  color=(144, 238, 144)),  # left_index_second_joint -> left_index_first_joint
+    SkeletonLink(start=47, end=46,  color=(144, 238, 144)),  # left_index_first_joint -> left_index_tip
+    SkeletonLink(start=62, end=53,  color=(0, 255, 127)),    # left_wrist -> left_middle_third_joint
+    SkeletonLink(start=53, end=52,  color=(0, 255, 127)),    # left_middle_third_joint -> left_middle_second_joint
+    SkeletonLink(start=52, end=51,  color=(0, 255, 127)),    # left_middle_second_joint -> left_middle_first_joint
+    SkeletonLink(start=51, end=50,  color=(0, 255, 127)),    # left_middle_first_joint -> left_middle_tip
+    SkeletonLink(start=62, end=57,  color=(107, 142, 35)),   # left_wrist -> left_ring_third_joint
+    SkeletonLink(start=57, end=56,  color=(107, 142, 35)),   # left_ring_third_joint -> left_ring_second_joint
+    SkeletonLink(start=56, end=55,  color=(107, 142, 35)),   # left_ring_second_joint -> left_ring_first_joint
+    SkeletonLink(start=55, end=54,  color=(107, 142, 35)),   # left_ring_first_joint -> left_ring_tip
+    SkeletonLink(start=62, end=61,  color=(152, 251, 152)),  # left_wrist -> left_pinky_third_joint
+    SkeletonLink(start=61, end=60,  color=(152, 251, 152)),  # left_pinky_third_joint -> left_pinky_second_joint
+    SkeletonLink(start=60, end=59,  color=(152, 251, 152)),  # left_pinky_second_joint -> left_pinky_first_joint
+    SkeletonLink(start=59, end=58,  color=(152, 251, 152)),  # left_pinky_first_joint -> left_pinky_tip
     SkeletonLink(start=41, end=24,  color=(255, 128, 0)),    # right_wrist -> right_thumb_third_joint
     SkeletonLink(start=24, end=23,  color=(255, 128, 0)),    # right_thumb_third_joint -> right_thumb_second_joint
     SkeletonLink(start=23, end=22,  color=(255, 128, 0)),    # right_thumb_second_joint -> right_thumb_first_joint
