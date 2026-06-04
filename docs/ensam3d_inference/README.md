@@ -35,26 +35,26 @@ To reproduce this benchmark on your hardware, refer to [ensam3d_inference.exampl
 
 This section provides a structured guide to the documentation layout of the `ensam3d_inference` package. Each file focuses on a specific layer of abstraction, ranging from high-level conceptual design to low-level installation and runtime setup.
 
-- To understand the **core idea and task formulation of the system**, see
+- To understand the core idea and task formulation of the system, see  
     [01-ensam3d-concept.md](01-ensam3d-concept.md).
 
-- To review the **original SAM 3D Body architecture used as the foundation of this project**, see
+- To review the original SAM 3D Body architecture used as the foundation of this project, see  
     [02-sam3d-concept.md](02-sam3d-concept.md).
 
-- To understand the **practical issues encountered when adapting the reference implementation for production inference**, see
+- To understand the practical issues encountered when adapting the reference implementation for production inference, see  
     [03-sam3d-issues.md](03-sam3d-issues.md).
 
-- To review the **architectural and engineering changes introduced in the production pipeline**, see
+- To review the architectural and engineering changes introduced in the production pipeline, see  
     [04-enhancements.md](04-enhancements.md).
 
-- To study the **runtime architecture and execution graph**, see
+- To study the runtime architecture and execution graph, see  
     [05-system-architecture.md](05-system-architecture.md).
 
-- To understand the **repository layout and package structure**, see
+- To understand the repository layout and package structure, see  
     [06-package-structure.md](06-package-structure.md).
 
-- To review the **dependency stack and required external assets**, see
+- To review the dependency stack and required external assets, see  
     [07-dependencies.md](07-dependencies.md).
 
-- To **install and run the project**, see
+- To install and run the project, see  
     [08-installation-guide.md](08-installation-guide.md).

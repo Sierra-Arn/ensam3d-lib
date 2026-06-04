@@ -2,7 +2,7 @@
 
 > *Collection of production-oriented inference pipelines based on [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body) for 3D human body pose and shape estimation.*
 
-## **Project Structure**
+## Project Structure
 
 ```bash
 ensam3d-lib/
