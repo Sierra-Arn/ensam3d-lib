@@ -38,6 +38,7 @@ python -m ensam3d_inference.examples.visualization \
     --image_export_path result.png
 """
 import argparse
+from pathlib import Path
 import cv2
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -52,6 +53,16 @@ from ensam3d_inference.examples.keypoints import KEYPOINTS, SKELETON
 
 
 def _parse_args() -> argparse.Namespace:
+    """
+    Parse command-line arguments for the visualizer script.
+
+    Returns
+    -------
+    argparse.Namespace
+        Parsed arguments containing the image path, the model path, the three
+        annotation toggles (bounding box, keypoints, skeleton), and the
+        optional image export path.
+    """
     parser = argparse.ArgumentParser(description="Pose estimation visualizer")
     parser.add_argument("--image_path", type=str, required=True)
     parser.add_argument("--model_path", type=str, required=True)
@@ -63,6 +74,20 @@ def _parse_args() -> argparse.Namespace:
 
 
 def _build_pipeline(args: argparse.Namespace) -> Pipeline:
+    """
+    Construct the inference pipeline configured to run on CUDA devices.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        Parsed command-line arguments providing the model path.
+
+    Returns
+    -------
+    Pipeline
+        A pipeline instance with both the detector and the model placed on
+        the CUDA device.
+    """
     return Pipeline(
         model_path=args.model_path,
         detector_device=DeviceType.CUDA,
@@ -71,6 +96,27 @@ def _build_pipeline(args: argparse.Namespace) -> Pipeline:
 
 
 def _read_image(image_path: str) -> np.ndarray:
+    """
+    Read an image from disk and convert it to RGB.
+
+    The image is decoded with OpenCV, which returns frames in BGR order, and
+    then converted to RGB so that the colors match matplotlib's expectations.
+
+    Parameters
+    ----------
+    image_path : str
+        Path to the image file to read.
+
+    Returns
+    -------
+    numpy.ndarray
+        The decoded image as an RGB array.
+
+    Raises
+    ------
+    RuntimeError
+        If the image cannot be read from the given path.
+    """
     img = cv2.imread(image_path)
     if img is None:
         raise RuntimeError(f"Failed to read image: {image_path}")
@@ -78,6 +124,20 @@ def _read_image(image_path: str) -> np.ndarray:
 
 
 def _draw_bbox(ax: plt.Axes, output: FramePoseResult) -> None:
+    """
+    Draw the detection bounding box on the given axes.
+
+    The box coordinates are read from the detection result as top-left and
+    bottom-right corners, converted to a width-height rectangle, and drawn as
+    an unfilled yellow outline.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        The axes to draw the bounding box on.
+    output : FramePoseResult
+        The per-frame pose result carrying the detection coordinates.
+    """
     x1, y1, x2, y2 = output.detection.coords.cpu().numpy()
     w = x2 - x1
     h = y2 - y1
@@ -91,6 +151,20 @@ def _draw_bbox(ax: plt.Axes, output: FramePoseResult) -> None:
 
 
 def _draw_keypoints(ax: plt.Axes, output: FramePoseResult) -> None:
+    """
+    Draw the predicted 2D keypoints as colored points on the given axes.
+
+    Each keypoint is rendered as a scatter marker using the per-keypoint color
+    defined in the KEYPOINTS table, with the color converted from 0-255 to the
+    0-1 range matplotlib expects.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        The axes to draw the keypoints on.
+    output : FramePoseResult
+        The per-frame pose result carrying the predicted 2D keypoints.
+    """
     kps = output.pose.pred_keypoints_2d[0].cpu().numpy()
     for idx, (x, y) in enumerate(kps):
         color = tuple(c / 255.0 for c in KEYPOINTS[idx].color)
@@ -98,6 +172,20 @@ def _draw_keypoints(ax: plt.Axes, output: FramePoseResult) -> None:
 
 
 def _draw_skeleton(ax: plt.Axes, output: FramePoseResult) -> None:
+    """
+    Draw the skeleton links connecting keypoints on the given axes.
+
+    Each link in the SKELETON table connects two keypoints and is drawn as a
+    line segment using the link's own color, converted from 0-255 to the 0-1
+    range matplotlib expects.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        The axes to draw the skeleton on.
+    output : FramePoseResult
+        The per-frame pose result carrying the predicted 2D keypoints.
+    """
     kps = output.pose.pred_keypoints_2d[0].cpu().numpy()
     for link in SKELETON:
         x_start, y_start = kps[link.start]
@@ -120,6 +208,30 @@ def _visualize(
     show_skeleton: bool,
     image_export_path: str | None,
 ) -> None:
+    """
+    Render the image with the selected annotations, then save or display it.
+
+    The annotations are drawn in a fixed order so that keypoints sit on top of
+    the skeleton, which in turn sits on top of the bounding box. When an export
+    path is given the figure is written to disk and its absolute location is
+    printed; otherwise the figure is shown interactively.
+
+    Parameters
+    ----------
+    image : numpy.ndarray
+        The RGB image to use as the background.
+    output : FramePoseResult
+        The per-frame pose result providing detection and keypoint data.
+    show_bbox : bool
+        Whether to draw the detection bounding box.
+    show_keypoints : bool
+        Whether to draw the predicted keypoints.
+    show_skeleton : bool
+        Whether to draw the skeleton links.
+    image_export_path : str or None
+        Destination path for the annotated image, or None to display it
+        interactively.
+    """
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     ax.imshow(image)
     ax.axis("off")
@@ -135,7 +247,7 @@ def _visualize(
 
     if image_export_path is not None:
         plt.savefig(image_export_path, bbox_inches="tight", dpi=150)
-        print(f"✅ Saved to: {image_export_path}")
+        print(f"✅ Saved to: {Path(image_export_path).resolve()}")
     else:
         plt.show()
 
@@ -143,6 +255,13 @@ def _visualize(
 
 
 def main() -> None:
+    """
+    Entry point wiring together argument parsing, image reading, pipeline
+    inference, and visualization.
+
+    If the pipeline detects no person in the image, a message is printed and
+    no figure is produced.
+    """
     args = _parse_args()
     pipeline = _build_pipeline(args)
     image = _read_image(args.image_path)
