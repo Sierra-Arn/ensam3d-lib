@@ -38,8 +38,10 @@ Performance characteristics of the pipeline are summarized below using a represe
 |------------------|------------------------------------------------------------------------------------------------------------------|
 | Benchmark Video  | [Man with prosthetic leg jogging, Pexels](https://www.pexels.com/video/man-with-prosthetic-leg-jogging-8344814/) |
 | Video Resolution | 3840 × 2160 (4K)                                                                                                 |
-| Video Duration   | 24.32 sec (608 frames)                                                                                           |
+| Video Duration   | 24.32 sec                                                                                                        |
 | Video FPS        | 25.00                                                                                                            |
+| Total Frames     | 608                                                                                                              |
+| CPU              | AMD Ryzen 7 5800H with Radeon Graphics                                                                           |
 | GPU              | NVIDIA GeForce RTX 3070 Laptop GPU                                                                               |
 | PyTorch Version  | 2.5.1.post306                                                                                                    |
 | CUDA Version     | 12.6                                                                                                             |
@@ -80,10 +82,16 @@ pixi add --pypi "ensam3d-lib @ git+https://github.com/Sierra-Arn/ensam3d-lib.git
 
 - [Pixi](https://pixi.sh/latest/) package manager.
 - GNU/Linux-based system on `x86_64` architecture.
-- NVIDIA GPU with NVIDIA driver compatible with CUDA Toolkit `>= 12.8`.
+- NVIDIA GPU with a driver that supports CUDA `>= 12.8`.
 
-> **Note:**  
-> These prerequisites are not strict requirements but describe the environment used for development. The package can be set up in alternative environments with different package managers, operating systems, or GPU configurations if needed.
+> **Note: on these prerequisites**  
+> These are not strict requirements but describe the environment used for development. The package can be set up in alternative environments with different package managers, operating systems, or GPU configurations if needed.
+
+> **Note: on CUDA versions**  
+> The `>= 12.8` figure is a *driver* requirement, enforced through pixi's `system-requirements`. It was chosen because 12.8 was the default CUDA build shipped by PyTorch at the time development started (a plain `pip install torch` pulled the 12.8 build back then).
+
+> **Note: the benchmarking and profiling scripts report**  
+> `CUDA Version: 12.6`. This is expected and not a mismatch: that value comes from `torch.version.cuda`, i.e. the CUDA version the PyTorch binary was *compiled against*, which is independent of the newer CUDA toolkit resolved into the environment. CUDA minor-version compatibility lets a 12.6 build run on any 12.x driver with the same major version.
 
 ### II. Setup
 
