@@ -6,23 +6,25 @@
 
 ```bash
 ensam3d-lib/
-├── src/                        # Standard src-layout; each subpackage is a self-contained, 
-│                               # production-ready reimplementation of SAM 3D Body
+├── src/              # Standard src-layout; each subpackage is a
+│                     # self-contained, production-ready reimplementation
+│                     # of SAM 3D Body.
 │
-├── docs/                       # Technical documentation — each subdirectory 
-│                               # mirrors its src/ counterpart with subpackage overview, 
-│                               # reference implementation analysis, production-oriented 
-│                               # architectural changes, runtime pipeline design, 
-│                               # package structure, dependencies, and installation.
+├── docs/             # Technical documentation; each subdirectory mirrors
+│                     # its src/ counterpart with subpackage overview,
+│                     # reference implementation analysis, production-oriented
+│                     # architectural changes, runtime pipeline design,
+│                     # package structure, dependencies, and installation.
 │
-├── pyproject.toml              # Standard Python project manifest defining 
-│                               # build system and package metadata
+├── pyproject.toml    # Standard Python project manifest defining the build
+│                     # system and package metadata.
 │
-├── pixi.toml                   # Pixi environment configuration for working with the repository
-│                               # as a local development project rather than a consumed dependency
+├── pixi.toml         # Pixi environment configuration for working with the
+│                     # repository as a local development project rather than
+│                     # a consumed dependency.
 │
-└── pixi.lock                   # Fully resolved and reproducible dependency lockfile
-                                # for the local Pixi development environment
+└── pixi.lock         # Fully resolved and reproducible dependency lockfile
+                      # for the local Pixi development environment.
 ```
 
 ## Available Subpackages
