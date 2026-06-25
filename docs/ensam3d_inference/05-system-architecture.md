@@ -1,6 +1,6 @@
-# V. **System Architecture**
+# V. System Architecture
 
-> *This document defines the concrete runtime architecture of the Enhanced SAM 3D Body Inference pipeline.*
+> *This document defines the concrete runtime architecture of the Enhanced SAM 3D Body Inference pipeline. After a brief overview, it walks through each runtime module top-down — from the `Pipeline` orchestrator down to the individual decoder heads — describing each one's responsibility, its execution flow as a diagram, and its typed input/output contract.*
 
 ## Overview
 
@@ -165,9 +165,9 @@ flowchart TD
 
 ## `Engine` Decomposition
 
-As described in the original SAM 3D Body architecture overview, the pose estimation stage combines visual feature extraction, transformer-based decoding, and geometric reconstruction into a unified inference graph.
+In the original SAM 3D Body architecture (described in the conceptual overview), the pose estimation stage combines visual feature extraction, transformer-based decoding, and geometric reconstruction into a single unified inference graph.
 
-Following the architectural simplifications introduced in this project, the runtime execution flow is reorganized into two high-level stages:
+This project's implementation reorganizes that flow into two explicit, high-level stages:
 
 - **Feature Extraction** — a single-pass visual encoding stage that computes dense backbone feature representations exactly once per batch.
 - **Pose Estimation** — an iterative transformer-based decoding stage that operates on fixed feature embeddings to progressively reconstruct the final 3D body representation.

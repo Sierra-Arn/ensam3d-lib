@@ -1,6 +1,6 @@
-# **`ensam3d_inference/`**
+# `ensam3d_inference/`
 
-> *This directory contains the full technical documentation for the `ensam3d_inference` package, including the system concept, the original SAM 3D Body reference architecture, practical integration issues identified in the reference implementation, the architectural and engineering changes introduced for production inference, runtime pipeline design, codebase structure, dependencies, installation, and usage. The documentation is organized to provide a clear, reproducible, and engineering-focused understanding of the system and its inference flow.*
+> *This directory holds the full technical documentation for the `ensam3d_inference` package. This file serves as its entry point: it gives a high-level overview of the package backed by a performance benchmark, then points to the file covering each layer of the system, from core concept to installation.*
 
 ## I. Package Overview
 
@@ -13,8 +13,10 @@ Performance characteristics of the pipeline are summarized below using a represe
 |------------------|------------------------------------------------------------------------------------------------------------------|
 | Benchmark Video  | [Man with prosthetic leg jogging, Pexels](https://www.pexels.com/video/man-with-prosthetic-leg-jogging-8344814/) |
 | Video Resolution | 3840 × 2160 (4K)                                                                                                 |
-| Video Duration   | 24.32 sec (608 frames)                                                                                           |
+| Video Duration   | 24.32 sec                                                                                                        |
 | Video FPS        | 25.00                                                                                                            |
+| Total Frames     | 608                                                                                                              |
+| CPU              | AMD Ryzen 7 5800H with Radeon Graphics                                                                           |
 | GPU              | NVIDIA GeForce RTX 3070 Laptop GPU                                                                               |
 | PyTorch Version  | 2.5.1.post306                                                                                                    |
 | CUDA Version     | 12.6                                                                                                             |
@@ -29,7 +31,7 @@ Performance characteristics of the pipeline are summarized below using a represe
 | Throughput       | 16.765 FPS      |
 | Peak VRAM Usage  | 2.82 GB         |
 
-To reproduce this benchmark on your hardware, refer to [ensam3d_inference.examples.benchmarking](../../src/ensam3d_inference/examples/benchmarking.py).
+To benchmark the pipeline on your own hardware, run [ensam3d_inference.examples.benchmarking](../../src/ensam3d_inference/examples/benchmarking.py).
 
 ## II. Documentation Overview
 

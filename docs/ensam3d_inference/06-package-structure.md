@@ -1,4 +1,4 @@
-# VI. **Package Structure**
+# VI. Package Structure
 
 > *This document describes the logical organization of the codebase following the stage-based execution model defined in the system architecture.*
 
@@ -32,7 +32,7 @@ ensam3d_inference/
 
 ## Component Overview
 
-> **Note:** all files include inline comments describing backend-specific decisions and non-obvious implementation details.
+> **Note:** all modules are documented with docstrings, and inline comments explain any non-obvious or unusual logic where it occurs.
 
 1. **`shared/`**
 
@@ -40,9 +40,9 @@ ensam3d_inference/
 
 2. **`preprocessor/`**, **`core/`**, **`pipeline/`**
 
-    Implementations of the runtime modules defined in the system architecture, corresponding respectively to the `Preprocessor`, `Engine`, and `Pipeline`.
-
-    Nested directories such as `detector/`, `feature_extraction/`, `backbone/`, `camera_encoder/`, `pose_estimation/`, `decoder/`, `mhr_head/`, and `perspective_head/` are implementations of the runtime modules defined in the system architecture, corresponding respectively to the `Detector`, `FeatureExtractor`, `Backbone`, `CameraEncoder`, `PoseEstimator`, `PromptableDecoder`, `MHRHead`, and `PerspectiveHead`.
+    Implementations of the runtime modules defined in the system architecture, corresponding respectively to the `Preprocessor`, `Engine`, and `Pipeline`. 
+    
+    Their nested directories follow the same one-to-one mapping: `detector/`, `feature_extraction/`, `backbone/`, `camera_encoder/`, `pose_estimation/`,  `decoder/`, `mhr_head/`, and `perspective_head/` correspond to the `Detector`, `FeatureExtractor`, `Backbone`, `CameraEncoder`, `PoseEstimator`, `PromptableDecoder`, `MHRHead`, and `PerspectiveHead` modules respectively.
 
     All `utils/` directories contain auxiliary utilities scoped to their corresponding architectural module.
 
